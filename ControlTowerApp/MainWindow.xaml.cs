@@ -81,10 +81,9 @@ namespace ControlTowerApp
             {
                 string message = $"Flight {e.Flight.Airliner} (Flight ID: {e.Flight.Id}) has landed at {e.Flight.Destination} at {DateTime.Now:HH:mm:ss}.";
                 lvStatusUpdates.Items.Add(message);
-
-                // Allow the flight to take off again after landing
                 btnTakeOff.IsEnabled = true;
                 btnNewHeight.IsEnabled = false;
+                e.Flight.Destination = "Home";
             });
         }
 

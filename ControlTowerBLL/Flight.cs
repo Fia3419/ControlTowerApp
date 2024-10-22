@@ -96,6 +96,7 @@ namespace ControlTowerBLL
         protected virtual void OnLanding()
         {
             InFlight = false;
+            Destination = "Home";
             Landed?.Invoke(this, new FlightEventArgs(this));
             dispatchTimer.Stop();
         }

@@ -53,6 +53,7 @@ namespace ControlTowerBLL
         public void LandFlight(FlightDTO flightDTO)
         {
             flightDTO.InFlight = false;
+            flightDTO.Destination = "Home";
             FlightLanded?.Invoke(this, new FlightEventArgs(flightDTO));
         }
 
@@ -72,7 +73,7 @@ namespace ControlTowerBLL
             Flight flight = items.FirstOrDefault(f => f.Id == flightDTO.Id);
             if (flight != null && flight.InFlight)
             {
-                flight.OnNewFlightHeight(newHeight);  // Raise the event for height change
+                flight.OnNewFlightHeight(newHeight);
             }
         }
 
