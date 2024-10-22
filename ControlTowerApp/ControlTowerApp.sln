@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlTowerApp", "ControlTowerApp.csproj", "{4052F1B0-F347-4A91-B5CF-6774B3F249A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlTowerBLL", "..\ControlTowerBLL\ControlTowerBLL.csproj", "{1345E139-40B7-4148-8BCC-98629788A2AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlTowerDAL", "..\ControlTowerDAL\ControlTowerDAL.csproj", "{9C088B7C-63B0-41A7-838E-88BEE483D095}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlTowerDTO", "..\ControlTowerDTO\ControlTowerDTO.csproj", "{38C1E468-AA33-49AC-8A03-3B21FE6682E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlTowerServices", "..\ControlTowerServices\ControlTowerServices.csproj", "{D10301E8-FDB3-4B64-80E3-FC087E7EE764}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilitiesLib", "..\UtilitiesLib\UtilitiesLib.csproj", "{C1659CC0-8F7A-4CC3-9488-14C9AC367D66}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4052F1B0-F347-4A91-B5CF-6774B3F249A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4052F1B0-F347-4A91-B5CF-6774B3F249A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4052F1B0-F347-4A91-B5CF-6774B3F249A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4052F1B0-F347-4A91-B5CF-6774B3F249A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1345E139-40B7-4148-8BCC-98629788A2AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1345E139-40B7-4148-8BCC-98629788A2AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1345E139-40B7-4148-8BCC-98629788A2AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1345E139-40B7-4148-8BCC-98629788A2AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C088B7C-63B0-41A7-838E-88BEE483D095}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C088B7C-63B0-41A7-838E-88BEE483D095}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C088B7C-63B0-41A7-838E-88BEE483D095}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C088B7C-63B0-41A7-838E-88BEE483D095}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38C1E468-AA33-49AC-8A03-3B21FE6682E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38C1E468-AA33-49AC-8A03-3B21FE6682E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38C1E468-AA33-49AC-8A03-3B21FE6682E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38C1E468-AA33-49AC-8A03-3B21FE6682E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D10301E8-FDB3-4B64-80E3-FC087E7EE764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D10301E8-FDB3-4B64-80E3-FC087E7EE764}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D10301E8-FDB3-4B64-80E3-FC087E7EE764}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D10301E8-FDB3-4B64-80E3-FC087E7EE764}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1659CC0-8F7A-4CC3-9488-14C9AC367D66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1659CC0-8F7A-4CC3-9488-14C9AC367D66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1659CC0-8F7A-4CC3-9488-14C9AC367D66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1659CC0-8F7A-4CC3-9488-14C9AC367D66}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1F6B3992-CA4E-4393-A5F3-B301F9C3D416}
+	EndGlobalSection
+EndGlobal
