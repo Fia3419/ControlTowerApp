@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using ControlTowerBLL;
+using ControlTowerDTO;
 
 namespace ControlTowerApp
 {
@@ -17,16 +18,16 @@ namespace ControlTowerApp
 
         private void btnAddPlane_Click(object sender, RoutedEventArgs e)
         {
-            Flight flight = new Flight(txtAirliner.Text, txtFlightId.Text, txtDestination.Text, double.Parse(txtDuration.Text));
+            var flight = new Flight(txtAirliner.Text, txtFlightId.Text, txtDestination.Text, double.Parse(txtDuration.Text));
             controlTower.AddFlight(flight);
-            lvFlights.Items.Add(flight);
+            lvFlights.Items.Add(flight.FlightData);
             btnTakeOff.IsEnabled = true;
             btnNewHeight.IsEnabled = true;
         }
 
         private void btnTakeOff_Click(object sender, RoutedEventArgs e)
         {
-            if (lvFlights.SelectedItem is Flight selectedFlight)
+            if (lvFlights.SelectedItem is FlightDTO selectedFlight)
             {
                 controlTower.TakeOffFlight(selectedFlight);
                 btnTakeOff.IsEnabled = false;
@@ -43,7 +44,8 @@ namespace ControlTowerApp
         {
             Dispatcher.Invoke(() =>
             {
-                txtLog.Text += $"Flight {e.Flight.Airliner} (Flight ID: {e.Flight.Id}) has departed for {e.Flight.Destination} at {e.Flight.DepartureTime:HH:mm:ss}.\n";
+                string message = $"Flight {e.Flight.Airliner} (Flight ID: {e.Flight.Id}) has departed for {e.Flight.Destination} at {e.Flight.DepartureTime:HH:mm:ss}.";
+                lvStatusUpdates.Items.Add(message);
             });
         }
 
@@ -51,7 +53,8 @@ namespace ControlTowerApp
         {
             Dispatcher.Invoke(() =>
             {
-                txtLog.Text += $"Flight {e.Flight.Airliner} (Flight ID: {e.Flight.Id}) has landed at {e.Flight.Destination} at {DateTime.Now:HH:mm:ss}.\n";
+                string message = $"Flight {e.Flight.Airliner} (Flight ID: {e.Flight.Id}) has landed at {e.Flight.Destination} at {DateTime.Now:HH:mm:ss}.";
+                lvStatusUpdates.Items.Add(message);
             });
         }
     }

@@ -48,15 +48,12 @@
         </ListView>
 
         <!-- ListView for Status Updates -->
-        <!-- <ListView x:Name="lvStatusUpdates" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="760" Height="100">
+        <ListView x:Name="lvStatusUpdates" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="760" Height="200">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Status Update" DisplayMemberBinding="{Binding}" Width="740"/>
                 </GridView>
             </ListView.View>
-        </ListView> -->
-
-        <!-- Log Output -->
-        <TextBox x:Name="txtLog" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="760" Height="202" IsReadOnly="True" TextWrapping="Wrap"/>
+        </ListView>
     </Grid>
 </Window>
