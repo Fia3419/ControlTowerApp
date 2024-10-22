@@ -1,35 +1,62 @@
 ﻿<Window x:Class="ControlTowerApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Control Tower - Departures" Height="400" Width="800">
+        Title="Control Tower - Departures" Height="600" Width="800">
     <Grid>
-        <Label Content="Destination" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtDestination" HorizontalAlignment="Left" Margin="100,10,0,0" VerticalAlignment="Top" Width="200"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="325"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-        <Label Content="Airliner" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtAirliner" HorizontalAlignment="Left" Margin="100,40,0,0" VerticalAlignment="Top" Width="200"/>
+        <!-- Labels and TextBoxes -->
+        <Label Content="Destination" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtDestination" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="100,10,0,0" VerticalAlignment="Top" Width="200"/>
 
-        <Label Content="Flight ID" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtFlightId" HorizontalAlignment="Left" Margin="100,70,0,0" VerticalAlignment="Top" Width="200"/>
+        <Label Content="Airliner" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtAirliner" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="100,10,0,0" VerticalAlignment="Top" Width="200"/>
 
-        <Label Content="Duration (hrs)" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtDuration" HorizontalAlignment="Left" Margin="100,100,0,0" VerticalAlignment="Top" Width="200"/>
+        <Label Content="Flight ID" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtFlightId" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Margin="100,10,0,0" VerticalAlignment="Top" Width="200"/>
 
-        <Button Content="Add Plane" HorizontalAlignment="Left" Margin="10,130,0,0" Name="btnAddPlane" VerticalAlignment="Top" Width="100" Click="btnAddPlane_Click"/>
-        <Button Content="Take Off" HorizontalAlignment="Left" Margin="120,130,0,0"  Name="btnTakeOff" VerticalAlignment="Top" Width="100" Click="btnTakeOff_Click" IsEnabled="False"/>
-        <Button Content="New Height" HorizontalAlignment="Left" Margin="230,130,0,0" Name="btnNewHeight" VerticalAlignment="Top" Width="100" Click="btnNewHeight_Click" IsEnabled="False"/>
+        <Label Content="Duration (hrs)" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtDuration" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" Margin="100,10,0,0" VerticalAlignment="Top" Width="200"/>
 
-        <ListView x:Name="lvFlights" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" Width="760" Height="200">
+        <!-- Buttons -->
+        <Button Content="Add Plane" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Margin="10,10,0,0" Name="btnAddPlane" VerticalAlignment="Top" Width="100" Click="btnAddPlane_Click"/>
+        <Button Content="Take Off" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Margin="120,10,0,0" Name="btnTakeOff" VerticalAlignment="Top" Width="100" Click="btnTakeOff_Click" IsEnabled="False"/>
+        <Button Content="New Height" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Margin="230,10,0,0" Name="btnNewHeight" VerticalAlignment="Top" Width="100" Click="btnNewHeight_Click" IsEnabled="False"/>
+
+        <!-- ListView for Flights -->
+        <ListView x:Name="lvFlights" Grid.Row="0" Grid.Column="1" Grid.RowSpan="5" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="430" Height="200">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Airliner" DisplayMemberBinding="{Binding Airliner}" Width="200"/>
+                    <GridViewColumn Header="Airliner" DisplayMemberBinding="{Binding Airliner}" Width="100"/>
                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" Width="100"/>
-                    <GridViewColumn Header="Destination" DisplayMemberBinding="{Binding Destination}" Width="200"/>
+                    <GridViewColumn Header="Destination" DisplayMemberBinding="{Binding Destination}" Width="100"/>
                     <GridViewColumn Header="Duration (hrs)" DisplayMemberBinding="{Binding Duration}" Width="100"/>
                 </GridView>
             </ListView.View>
         </ListView>
 
-        <TextBox x:Name="txtLog" HorizontalAlignment="Left" Margin="10,370,0,0" VerticalAlignment="Top" Width="760" Height="100" IsReadOnly="True" TextWrapping="Wrap"/>
+        <!-- ListView for Status Updates -->
+        <!-- <ListView x:Name="lvStatusUpdates" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="760" Height="100">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Status Update" DisplayMemberBinding="{Binding}" Width="740"/>
+                </GridView>
+            </ListView.View>
+        </ListView> -->
+
+        <!-- Log Output -->
+        <TextBox x:Name="txtLog" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="760" Height="202" IsReadOnly="True" TextWrapping="Wrap"/>
     </Grid>
 </Window>

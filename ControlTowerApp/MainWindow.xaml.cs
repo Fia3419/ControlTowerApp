@@ -17,7 +17,7 @@ namespace ControlTowerApp
 
         private void btnAddPlane_Click(object sender, RoutedEventArgs e)
         {
-            var flight = new Flight(txtAirliner.Text, txtFlightId.Text, txtDestination.Text, double.Parse(txtDuration.Text));
+            Flight flight = new Flight(txtAirliner.Text, txtFlightId.Text, txtDestination.Text, double.Parse(txtDuration.Text));
             controlTower.AddFlight(flight);
             lvFlights.Items.Add(flight);
             btnTakeOff.IsEnabled = true;
