@@ -1,6 +1,6 @@
-﻿using System;
+﻿using ControlTowerDTO;
+using System;
 using System.Windows.Threading;
-using ControlTowerDTO;
 
 namespace ControlTowerBLL
 {
@@ -44,11 +44,9 @@ namespace ControlTowerBLL
             set => FlightData.DepartureTime = value;
         }
 
-        public int FlightHeight { get; private set; }
-
-        public event EventHandler<FlightEventArgs> TakeOff;
-        public event EventHandler<FlightEventArgs> Landed;
-        public event EventHandler<FlightEventArgs> FlightHeightChange;
+        public event EventHandler<TakeOffEventArgs> TakeOff;
+        public event EventHandler<LandedEventArgs> Landed;
+        public event EventHandler<FlightHeightChangedEventArgs> FlightHeightChanged;
 
         private DispatcherTimer dispatchTimer;
 
@@ -88,23 +86,27 @@ namespace ControlTowerBLL
             SetupTimer();
         }
 
+        public void ChangeFlightHeight(int newHeight)
+        {
+            FlightData.FlightHeight = newHeight;
+            OnFlightHeightChanged(newHeight);
+        }
+
         protected virtual void OnTakeOff()
         {
-            TakeOff?.Invoke(this, new FlightEventArgs(this));
+            TakeOff?.Invoke(this, new TakeOffEventArgs(this));
         }
 
         protected virtual void OnLanding()
         {
             InFlight = false;
-            Destination = "Home";
-            Landed?.Invoke(this, new FlightEventArgs(this));
+            Landed?.Invoke(this, new LandedEventArgs(this));
             dispatchTimer.Stop();
         }
 
-        public void OnNewFlightHeight(int newHeight)
+        protected virtual void OnFlightHeightChanged(int newHeight)
         {
-            FlightHeight = newHeight;
-            FlightHeightChange?.Invoke(this, new FlightEventArgs(newHeight));
+            FlightHeightChanged?.Invoke(this, new FlightHeightChangedEventArgs(this, newHeight));
         }
     }
 }

@@ -66,7 +66,7 @@ namespace ControlTowerApp
 
 
 
-        private void OnFlightTakeOff(object sender, FlightEventArgs e)
+        private void OnFlightTakeOff(object sender, TakeOffEventArgs e)
         {
             Dispatcher.Invoke(() =>
             {
@@ -75,7 +75,7 @@ namespace ControlTowerApp
             });
         }
 
-        private void OnFlightLanded(object sender, FlightEventArgs e)
+        private void OnFlightLanded(object sender, LandedEventArgs e)
         {
             Dispatcher.Invoke(() =>
             {
@@ -83,7 +83,7 @@ namespace ControlTowerApp
                 lvStatusUpdates.Items.Add(message);
                 btnTakeOff.IsEnabled = true;
                 btnNewHeight.IsEnabled = false;
-                e.Flight.Destination = "Home";
+                e.Flight.Destination = "Home"; // Resetting destination to 'Home'
             });
         }
 

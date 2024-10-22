@@ -29,14 +29,18 @@ namespace ControlTowerServices
             controlTower.LandFlight(flight);
         }
 
-        public void SubscribeToTakeOff(EventHandler<FlightEventArgs> handler)
+        public void SubscribeToTakeOff(EventHandler<TakeOffEventArgs> handler)
         {
             controlTower.FlightTakeOff += handler;
         }
 
-        public void SubscribeToLanding(EventHandler<FlightEventArgs> handler)
+        public void SubscribeToLanding(EventHandler<LandedEventArgs> handler)
         {
             controlTower.FlightLanded += handler;
+        }
+        public void SubscribeToFlightHeightChanged(EventHandler<FlightHeightChangedEventArgs> handler)
+        {
+            controlTower.FlightHeightChanged += handler;
         }
     }
 }
