@@ -18,27 +18,57 @@ namespace ControlTowerApp
 
         private void btnAddPlane_Click(object sender, RoutedEventArgs e)
         {
-            var flight = new Flight(txtAirliner.Text, txtFlightId.Text, txtDestination.Text, double.Parse(txtDuration.Text));
+            if (string.IsNullOrWhiteSpace(txtAirliner.Text) ||
+                string.IsNullOrWhiteSpace(txtFlightId.Text) ||
+                string.IsNullOrWhiteSpace(txtDestination.Text) ||
+                !UtilitiesLib.InputParser.TryParseDecimal(txtDuration.Text, out decimal duration))
+            {
+                MessageBox.Show("Please provide valid flight details.");
+                return;
+            }
+
+            var flight = new Flight(txtAirliner.Text, txtFlightId.Text, txtDestination.Text, (double)duration);
             controlTower.AddFlight(flight);
             lvFlights.Items.Add(flight.FlightData);
             btnTakeOff.IsEnabled = true;
-            btnNewHeight.IsEnabled = true;
         }
+
 
         private void btnTakeOff_Click(object sender, RoutedEventArgs e)
         {
-            if (lvFlights.SelectedItem is FlightDTO selectedFlight)
+            if (lvFlights.SelectedItem is FlightDTO selectedFlight && !selectedFlight.InFlight)
             {
                 controlTower.TakeOffFlight(selectedFlight);
                 btnTakeOff.IsEnabled = false;
-                btnNewHeight.IsEnabled = false;
+                btnNewHeight.IsEnabled = true;
             }
         }
 
+
         private void btnNewHeight_Click(object sender, RoutedEventArgs e)
         {
-            // Implement the logic for changing the flight height here
+            if (lvFlights.SelectedItem is FlightDTO selectedFlight)
+            {
+                // Show the input dialog to get the new height
+                string inputHeight = InputDialog.Show("Enter New Flight Height", "Please enter the new flight height:");
+
+                // Try to parse the input as an integer
+                if (int.TryParse(inputHeight, out int newHeight))
+                {
+                    // Call the ChangeFlightHeight method from the control tower
+                    controlTower.ChangeFlightHeight(selectedFlight, newHeight);
+
+                    // Optionally, log the change to the status updates
+                    lvStatusUpdates.Items.Add($"Flight {selectedFlight.Airliner} (Flight ID: {selectedFlight.Id}) changed altitude to {newHeight}.");
+                }
+                else
+                {
+                    MessageBox.Show("Invalid height. Please enter a valid number.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
+
+
 
         private void OnFlightTakeOff(object sender, FlightEventArgs e)
         {
@@ -55,7 +85,12 @@ namespace ControlTowerApp
             {
                 string message = $"Flight {e.Flight.Airliner} (Flight ID: {e.Flight.Id}) has landed at {e.Flight.Destination} at {DateTime.Now:HH:mm:ss}.";
                 lvStatusUpdates.Items.Add(message);
+
+                // Allow the flight to take off again after landing
+                btnTakeOff.IsEnabled = true;
+                btnNewHeight.IsEnabled = false;
             });
         }
+
     }
 }

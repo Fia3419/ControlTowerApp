@@ -65,5 +65,16 @@ namespace ControlTowerBLL
         {
             FlightLanded?.Invoke(this, e);
         }
+
+        public void ChangeFlightHeight(FlightDTO flightDTO, int newHeight)
+        {
+            // Assuming flight exists and is in flight
+            Flight flight = items.FirstOrDefault(f => f.Id == flightDTO.Id);
+            if (flight != null && flight.InFlight)
+            {
+                flight.OnNewFlightHeight(newHeight);  // Raise the event for height change
+            }
+        }
+
     }
 }

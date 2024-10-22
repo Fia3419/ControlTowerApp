@@ -7,6 +7,7 @@ namespace ControlTowerBLL
     {
         public Flight Flight { get; }
         public FlightDTO FlightDTO { get; }
+        public int NewHeight { get; }
 
         public FlightEventArgs(Flight flight)
         {
@@ -17,6 +18,11 @@ namespace ControlTowerBLL
         public FlightEventArgs(FlightDTO flightDTO)
         {
             FlightDTO = flightDTO;
+        }
+
+        public FlightEventArgs(int newHeight)
+        {
+            NewHeight = newHeight;
         }
     }
 }

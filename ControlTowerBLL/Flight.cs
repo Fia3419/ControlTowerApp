@@ -44,8 +44,11 @@ namespace ControlTowerBLL
             set => FlightData.DepartureTime = value;
         }
 
+        public int FlightHeight { get; private set; }
+
         public event EventHandler<FlightEventArgs> TakeOff;
         public event EventHandler<FlightEventArgs> Landed;
+        public event EventHandler<FlightEventArgs> FlightHeightChange;
 
         private DispatcherTimer dispatchTimer;
 
@@ -95,6 +98,12 @@ namespace ControlTowerBLL
             InFlight = false;
             Landed?.Invoke(this, new FlightEventArgs(this));
             dispatchTimer.Stop();
+        }
+
+        public void OnNewFlightHeight(int newHeight)
+        {
+            FlightHeight = newHeight;
+            FlightHeightChange?.Invoke(this, new FlightEventArgs(newHeight));
         }
     }
 }
