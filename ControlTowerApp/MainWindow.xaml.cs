@@ -49,16 +49,12 @@ namespace ControlTowerApp
         {
             if (lvFlights.SelectedItem is FlightDTO selectedFlight)
             {
-                // Show the input dialog to get the new height
                 string inputHeight = InputDialog.Show("Enter New Flight Height", "Please enter the new flight height:");
 
-                // Try to parse the input as an integer
                 if (int.TryParse(inputHeight, out int newHeight))
                 {
-                    // Call the ChangeFlightHeight method from the control tower
                     controlTower.ChangeFlightHeight(selectedFlight, newHeight);
 
-                    // Optionally, log the change to the status updates
                     lvStatusUpdates.Items.Add($"Flight {selectedFlight.Airliner} (Flight ID: {selectedFlight.Id}) changed altitude to {newHeight}.");
                 }
                 else
