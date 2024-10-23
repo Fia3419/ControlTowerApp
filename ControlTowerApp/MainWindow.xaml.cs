@@ -79,11 +79,20 @@ namespace ControlTowerApp
         {
             Dispatcher.Invoke(() =>
             {
-                string message = $"Flight {e.Flight.Airliner} (Flight ID: {e.Flight.Id}) has landed at {e.Flight.Destination} at {DateTime.Now:HH:mm:ss}.";
-                lvStatusUpdates.Items.Add(message);
-                btnTakeOff.IsEnabled = true;
-                btnNewHeight.IsEnabled = false;
-                e.Flight.Destination = "Home"; // Resetting destination to 'Home'
+
+                if (e.Flight != null)
+                {
+                    string message = $"Flight {e.Flight.Airliner} (Flight ID: {e.Flight.Id}) has landed at {DateTime.Now:HH:mm:ss}.";
+                    lvStatusUpdates.Items.Add(message);
+                    lvStatusUpdates.UpdateLayout();
+                    btnTakeOff.IsEnabled = true;
+                    btnNewHeight.IsEnabled = false;
+                    e.Flight.Destination = "Home";
+                }
+                else
+                {
+                    Console.WriteLine("Flight object is null in OnFlightLanded.");
+                }
             });
         }
 

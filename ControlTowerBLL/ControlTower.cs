@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using ControlTowerDAL;
 using ControlTowerDTO;
 using ControlTowerBLL.Managers;
-using ControlTowerDAL;
 
 namespace ControlTowerBLL
 {

@@ -1,6 +1,6 @@
-﻿using ControlTowerDTO;
-using System;
+﻿using System;
 using System.Windows.Threading;
+using ControlTowerDTO;
 
 namespace ControlTowerBLL
 {
@@ -11,7 +11,10 @@ namespace ControlTowerBLL
         public event EventHandler<FlightHeightChangedEventArgs> FlightHeightChanged;
 
         private DispatcherTimer dispatchTimer;
+        private double flightProgress; // Keeps track of the simulated flight progress in hours
+
         public FlightDTO FlightData { get; private set; }
+        public int FlightHeight { get; private set; }
 
         public string Airliner
         {
@@ -49,8 +52,6 @@ namespace ControlTowerBLL
             set => FlightData.DepartureTime = value;
         }
 
-
-
         public Flight(string airliner, string id, string destination, double duration)
         {
             FlightData = new FlightDTO
@@ -61,19 +62,23 @@ namespace ControlTowerBLL
                 Duration = duration,
                 InFlight = false
             };
+            flightProgress = 0;
         }
 
         public void SetupTimer()
         {
             dispatchTimer = new DispatcherTimer();
             dispatchTimer.Tick += DispatcherTimer_Tick;
-            dispatchTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatchTimer.Interval = TimeSpan.FromSeconds(1);
             dispatchTimer.Start();
         }
 
         private void DispatcherTimer_Tick(object sender, EventArgs e)
         {
-            if ((DateTime.Now - DepartureTime).TotalSeconds >= Duration)
+            flightProgress += 1;
+            Console.WriteLine($"Tick: {flightProgress}/{Duration} hours flown");
+
+            if (flightProgress >= Duration)
             {
                 OnLanding();
             }
@@ -83,13 +88,19 @@ namespace ControlTowerBLL
         {
             InFlight = true;
             DepartureTime = DateTime.Now;
+            flightProgress = 0;
             OnTakeOff();
             SetupTimer();
         }
 
+        public void LandFlight()
+        {
+            OnLanding();
+        }
+
         public void ChangeFlightHeight(int newHeight)
         {
-            FlightData.FlightHeight = newHeight;
+            FlightHeight = newHeight;
             OnFlightHeightChanged(newHeight);
         }
 
