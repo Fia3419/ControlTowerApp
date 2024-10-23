@@ -41,20 +41,27 @@ namespace ControlTowerBLL
 
         public void TakeOffFlight(FlightDTO flightDTO)
         {
-            Flight flight = new Flight(flightDTO.Airliner, flightDTO.Id, flightDTO.Destination, flightDTO.Duration);
-            flight.TakeOffFlight();
+            Flight flight = new Flight(flightDTO.Airliner, flightDTO.Id, flightDTO.Destination, flightDTO.Duration)
+            {
+                InFlight = flightDTO.InFlight,
+                DepartureTime = flightDTO.DepartureTime
+            };
+            TakeOffFlight(flight);
+            flightDTO.InFlight = true;
+            flightDTO.DepartureTime = DateTime.Now;
             FlightTakeOff?.Invoke(this, new TakeOffEventArgs(flight));
         }
 
         public void LandFlight(FlightDTO flightDTO)
         {
             flightDTO.InFlight = false;
+            flightDTO.Destination = "Home";
             FlightLanded?.Invoke(this, new LandedEventArgs(new Flight(flightDTO.Airliner, flightDTO.Id, flightDTO.Destination, flightDTO.Duration)));
         }
 
         public void ChangeFlightHeight(FlightDTO flightDTO, int newHeight)
         {
-            var flight = new Flight(flightDTO.Airliner, flightDTO.Id, flightDTO.Destination, flightDTO.Duration);
+            Flight flight = new Flight(flightDTO.Airliner, flightDTO.Id, flightDTO.Destination, flightDTO.Duration);
             flight.ChangeFlightHeight(newHeight);
             FlightHeightChanged?.Invoke(this, new FlightHeightChangedEventArgs(flight, newHeight));
         }

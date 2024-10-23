@@ -6,6 +6,11 @@ namespace ControlTowerBLL
 {
     public class Flight
     {
+        public event EventHandler<TakeOffEventArgs> TakeOff;
+        public event EventHandler<LandedEventArgs> Landed;
+        public event EventHandler<FlightHeightChangedEventArgs> FlightHeightChanged;
+
+        private DispatcherTimer dispatchTimer;
         public FlightDTO FlightData { get; private set; }
 
         public string Airliner
@@ -44,11 +49,7 @@ namespace ControlTowerBLL
             set => FlightData.DepartureTime = value;
         }
 
-        public event EventHandler<TakeOffEventArgs> TakeOff;
-        public event EventHandler<LandedEventArgs> Landed;
-        public event EventHandler<FlightHeightChangedEventArgs> FlightHeightChanged;
 
-        private DispatcherTimer dispatchTimer;
 
         public Flight(string airliner, string id, string destination, double duration)
         {
