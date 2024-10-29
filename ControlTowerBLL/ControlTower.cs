@@ -118,9 +118,7 @@ namespace ControlTowerBLL
         /// <param name="sender">The flight that took off.</param>
         /// <param name="e">Event arguments containing the flight information.</param>
         private void OnFlightTakeOff(object sender, TakeOffEventArgs e)
-        {
-            FlightTakeOff?.Invoke(this, e);
-        }
+            => FlightTakeOff?.Invoke(this, e);
 
         /// <summary>
         /// Event handler for when a flight lands.
@@ -128,8 +126,6 @@ namespace ControlTowerBLL
         /// <param name="sender">The flight that landed.</param>
         /// <param name="e">Event arguments containing the flight information.</param>
         private void OnFlightLanded(object sender, LandedEventArgs e)
-        {
-            FlightLanded?.Invoke(this, e);
-        }
+            => FlightLanded?.Invoke(this, e);
     }
 }

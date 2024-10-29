@@ -68,10 +68,7 @@ namespace ControlTowerBLL
         /// Changes the flight's altitude to a new value.
         /// </summary>
         /// <param name="newHeight">The new altitude for the flight.</param>
-        public void ChangeFlightHeight(int newHeight)
-        {
-            FlightHeight = newHeight;
-        }
+        public void ChangeFlightHeight(int newHeight) => FlightHeight = newHeight;
 
         /// <summary>
         /// Initiates the landing process and triggers the FlightLanded event.
@@ -107,11 +104,8 @@ namespace ControlTowerBLL
         }
 
         /// <summary>
-        /// Stops the flight timer.
+        /// Stops the timer when the flight has landed.
         /// </summary>
-        private void StopTimer()
-        {
-            dispatchTimer.Stop();
-        }
+        private void StopTimer() => dispatchTimer?.Stop();
     }
 }

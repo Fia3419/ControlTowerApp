@@ -11,10 +11,8 @@ namespace UtilitiesLib
         /// <param name="input">The string to parse.</param>
         /// <param name="result">The parsed integer result.</param>
         /// <returns>True if the parsing was successful, false otherwise.</returns>
-        public static bool TryParseInt(string input, out int result)
-        {
-            return int.TryParse(input, out result);
-        }
+        public static bool TryParseInt(string input, out int result) =>
+            int.TryParse(input, out result);
 
         /// <summary>
         /// Tries to parse a string into a decimal.
@@ -22,10 +20,8 @@ namespace UtilitiesLib
         /// <param name="input">The string to parse.</param>
         /// <param name="result">The parsed decimal result.</param>
         /// <returns>True if the parsing was successful, false otherwise.</returns>
-        public static bool TryParseDecimal(string input, out decimal result)
-        {
-            return decimal.TryParse(input, out result);
-        }
+        public static bool TryParseDecimal(string input, out decimal result) =>
+            decimal.TryParse(input, out result);
 
         /// <summary>
         /// Tries to parse a string into an integer within a specific range.

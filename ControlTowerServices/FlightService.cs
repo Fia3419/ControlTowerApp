@@ -13,10 +13,7 @@ namespace ControlTowerServices
         /// <summary>
         /// Initializes a new instance of the FlightService class, setting up the ControlTower.
         /// </summary>
-        public FlightService()
-        {
-            controlTower = new ControlTower();
-        }
+        public FlightService() => controlTower = new ControlTower();
 
         /// <summary>
         /// Adds a flight to the control tower's flight list.
@@ -27,7 +24,6 @@ namespace ControlTowerServices
             Flight flight = new Flight(flightDTO.Airliner, flightDTO.Id, flightDTO.Destination, flightDTO.Duration);
             controlTower.AddFlight(flight);
         }
-
         /// <summary>
         /// Initiates the takeoff process for a flight.
         /// </summary>
@@ -37,7 +33,6 @@ namespace ControlTowerServices
             Flight flight = controlTower.FindFlightById(flightDTO.Id);
             controlTower.TakeOffFlight(flight);
         }
-
         /// <summary>
         /// Lands a flight.
         /// </summary>
@@ -47,7 +42,6 @@ namespace ControlTowerServices
             Flight flight = controlTower.FindFlightById(flightDTO.Id);
             controlTower.LandFlight(flight);
         }
-
         /// <summary>
         /// Changes the flight's altitude by a given value.
         /// </summary>
@@ -58,23 +52,18 @@ namespace ControlTowerServices
             Flight flight = controlTower.FindFlightById(flightDTO.Id);
             controlTower.ChangeFlightHeight(flight, newHeight);
         }
-
         /// <summary>
         /// Subscribes to the takeoff event for flights.
         /// </summary>
         /// <param name="handler">The event handler to be triggered when a flight takes off.</param>
-        public void SubscribeToTakeOff(EventHandler<TakeOffEventArgs> handler)
-        {
+        public void SubscribeToTakeOff(EventHandler<TakeOffEventArgs> handler) =>
             controlTower.FlightTakeOff += handler;
-        }
 
         /// <summary>
         /// Subscribes to the landing event for flights.
         /// </summary>
         /// <param name="handler">The event handler to be triggered when a flight lands.</param>
-        public void SubscribeToLanding(EventHandler<LandedEventArgs> handler)
-        {
+        public void SubscribeToLanding(EventHandler<LandedEventArgs> handler) =>
             controlTower.FlightLanded += handler;
-        }
     }
 }
