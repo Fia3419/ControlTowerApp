@@ -7,11 +7,12 @@ namespace ControlTowerApp
 {
     public partial class MainWindow : Window
     {
-        private ControlTower controlTower = new ControlTower();
+        private ControlTower controlTower;
 
         public MainWindow()
         {
             InitializeComponent();
+            controlTower = new ControlTower();
             controlTower.FlightTakeOff += OnFlightTakeOff;
             controlTower.FlightLanded += OnFlightLanded;
         }
@@ -37,7 +38,7 @@ namespace ControlTowerApp
         {
             if (lvFlights.SelectedItem is FlightDTO selectedFlight && !selectedFlight.InFlight)
             {
-                controlTower.TakeOffFlight(selectedFlight);
+                controlTower.InitiateTakeOff(selectedFlight);
                 btnTakeOff.IsEnabled = false;
                 btnNewHeight.IsEnabled = true;
             }

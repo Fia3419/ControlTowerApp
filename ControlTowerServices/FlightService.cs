@@ -21,7 +21,7 @@ namespace ControlTowerServices
 
         public void TakeOffFlight(FlightDTO flight)
         {
-            controlTower.TakeOffFlight(flight);
+            controlTower.InitiateTakeOff(flight);
         }
 
         public void LandFlight(FlightDTO flight)

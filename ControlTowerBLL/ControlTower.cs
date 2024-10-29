@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using ControlTowerDAL;
 using ControlTowerDTO;
 using ControlTowerBLL.Managers;
-using ControlTowerBLL;
 
 namespace ControlTowerBLL
 {
@@ -13,8 +12,6 @@ namespace ControlTowerBLL
         public event EventHandler<TakeOffEventArgs> FlightTakeOff;
         public event EventHandler<LandedEventArgs> FlightLanded;
         public delegate int ChangeAltitudeDelegate(int currentAltitude, int changeValue);
-
-
         public ChangeAltitudeDelegate ChangeAltitudeHandler { get; private set; }
 
         public ControlTower()
@@ -29,8 +26,7 @@ namespace ControlTowerBLL
 
         public void AddFlight(Flight flight)
         {
-            flight.FlightTakeOff += OnFlightTakeOff;
-            flight.FlightLanded += OnFlightLanded;
+            SubscribeToFlightEvents(flight);
             Add(flight);
         }
 
@@ -46,9 +42,9 @@ namespace ControlTowerBLL
             return flightRepository.GetFlights();
         }
 
-        public void TakeOffFlight(FlightDTO flightDTO)
+        public void InitiateTakeOff(FlightDTO flightDTO)
         {
-            Flight flight = items.Find(f => f.Id == flightDTO.Id);
+            Flight flight = FindFlightById(flightDTO.Id);
             if (flight != null && !flight.InFlight)
             {
                 flight.TakeOffFlight();
@@ -59,7 +55,7 @@ namespace ControlTowerBLL
 
         public void LandFlight(FlightDTO flightDTO)
         {
-            Flight flight = items.Find(f => f.Id == flightDTO.Id);
+            Flight flight = FindFlightById(flightDTO.Id);
             if (flight != null)
             {
                 flight.LandFlight();
@@ -71,13 +67,23 @@ namespace ControlTowerBLL
 
         public void ChangeFlightHeight(FlightDTO flightDTO, int changeValue)
         {
-            Flight flight = items.Find(f => f.Id == flightDTO.Id);
+            Flight flight = FindFlightById(flightDTO.Id);
             if (flight != null && flight.InFlight)
             {
-                // Use the delegate to change the altitude
                 int newAltitude = ChangeAltitudeHandler(flight.FlightHeight, changeValue);
                 flight.ChangeFlightHeight(newAltitude);
             }
+        }
+
+        private void SubscribeToFlightEvents(Flight flight)
+        {
+            flight.FlightTakeOff += OnFlightTakeOff;
+            flight.FlightLanded += OnFlightLanded;
+        }
+
+        private Flight FindFlightById(string flightId)
+        {
+            return items.Find(f => f.Id == flightId);
         }
 
         private void OnFlightTakeOff(object sender, TakeOffEventArgs e)
