@@ -1,16 +1,14 @@
 using System;
-using System.Collections.Generic;
-using ControlTowerDAL;
-using ControlTowerDTO;
 using ControlTowerBLL.Managers;
+using ControlTowerDTO;
 
 namespace ControlTowerBLL
 {
     public class ControlTower : ListManager<Flight>
     {
-        private readonly FlightRepository flightRepository = new FlightRepository();
         public event EventHandler<TakeOffEventArgs> FlightTakeOff;
         public event EventHandler<LandedEventArgs> FlightLanded;
+
         public delegate int ChangeAltitudeDelegate(int currentAltitude, int changeValue);
         public ChangeAltitudeDelegate ChangeAltitudeHandler { get; private set; }
 
@@ -26,64 +24,40 @@ namespace ControlTowerBLL
 
         public void AddFlight(Flight flight)
         {
-            SubscribeToFlightEvents(flight);
+            flight.FlightTakeOff += OnFlightTakeOff;
+            flight.FlightLanded += OnFlightLanded;
             Add(flight);
         }
 
-        public void AddFlight(FlightDTO flightDTO)
+        public Flight FindFlightById(string flightId)
         {
-            Flight flight = new Flight(flightDTO.Airliner, flightDTO.Id, flightDTO.Destination, flightDTO.Duration);
-            AddFlight(flight);
-            flightRepository.AddFlight(flightDTO);
+            return items.Find(f => f.FlightData.Id == flightId);
         }
 
-        public List<FlightDTO> GetFlights()
+        public void TakeOffFlight(Flight flight)
         {
-            return flightRepository.GetFlights();
-        }
-
-        public void InitiateTakeOff(FlightDTO flightDTO)
-        {
-            Flight flight = FindFlightById(flightDTO.Id);
-            if (flight != null && !flight.InFlight)
+            if (flight != null && !flight.FlightData.InFlight)
             {
                 flight.TakeOffFlight();
-                flightDTO.InFlight = true;
-                flightDTO.DepartureTime = DateTime.Now;
             }
         }
 
-        public void LandFlight(FlightDTO flightDTO)
+        public void ChangeFlightHeight(Flight flight, int changeValue)
         {
-            Flight flight = FindFlightById(flightDTO.Id);
-            if (flight != null)
-            {
-                flight.LandFlight();
-                flightDTO.InFlight = false;
-                flightDTO.Destination = "Home";
-                FlightLanded?.Invoke(this, new LandedEventArgs(flight));
-            }
-        }
-
-        public void ChangeFlightHeight(FlightDTO flightDTO, int changeValue)
-        {
-            Flight flight = FindFlightById(flightDTO.Id);
-            if (flight != null && flight.InFlight)
+            if (flight != null && flight.FlightData.InFlight)
             {
                 int newAltitude = ChangeAltitudeHandler(flight.FlightHeight, changeValue);
                 flight.ChangeFlightHeight(newAltitude);
             }
         }
 
-        private void SubscribeToFlightEvents(Flight flight)
+        public void LandFlight(Flight flight)
         {
-            flight.FlightTakeOff += OnFlightTakeOff;
-            flight.FlightLanded += OnFlightLanded;
-        }
-
-        private Flight FindFlightById(string flightId)
-        {
-            return items.Find(f => f.Id == flightId);
+            if (flight != null)
+            {
+                flight.LandFlight();
+                FlightLanded?.Invoke(this, new LandedEventArgs(flight));
+            }
         }
 
         private void OnFlightTakeOff(object sender, TakeOffEventArgs e)

@@ -2,19 +2,20 @@
 using System.Windows;
 using ControlTowerBLL;
 using ControlTowerDTO;
+using ControlTowerServices;
 
 namespace ControlTowerApp
 {
     public partial class MainWindow : Window
     {
-        private ControlTower controlTower;
+        private FlightService flightService;
 
         public MainWindow()
         {
             InitializeComponent();
-            controlTower = new ControlTower();
-            controlTower.FlightTakeOff += OnFlightTakeOff;
-            controlTower.FlightLanded += OnFlightLanded;
+            flightService = new FlightService();
+            flightService.SubscribeToTakeOff(OnFlightTakeOff);
+            flightService.SubscribeToLanding(OnFlightLanded);
         }
 
         private void btnAddPlane_Click(object sender, RoutedEventArgs e)
@@ -28,9 +29,15 @@ namespace ControlTowerApp
                 return;
             }
 
-            Flight flight = new Flight(txtAirliner.Text, txtFlightId.Text, txtDestination.Text, (double)duration);
-            controlTower.AddFlight(flight);
-            lvFlights.Items.Add(flight.FlightData);
+            FlightDTO flightDTO = new FlightDTO
+            {
+                Airliner = txtAirliner.Text,
+                Id = txtFlightId.Text,
+                Destination = txtDestination.Text,
+                Duration = (double)duration
+            };
+            flightService.AddFlight(flightDTO);
+            lvFlights.Items.Add(flightDTO);
             btnTakeOff.IsEnabled = true;
         }
 
@@ -38,7 +45,7 @@ namespace ControlTowerApp
         {
             if (lvFlights.SelectedItem is FlightDTO selectedFlight && !selectedFlight.InFlight)
             {
-                controlTower.InitiateTakeOff(selectedFlight);
+                flightService.TakeOffFlight(selectedFlight);
                 btnTakeOff.IsEnabled = false;
                 btnNewHeight.IsEnabled = true;
             }
@@ -52,7 +59,7 @@ namespace ControlTowerApp
 
                 if (int.TryParse(inputHeight, out int newHeight))
                 {
-                    controlTower.ChangeFlightHeight(selectedFlight, newHeight);
+                    flightService.ChangeFlightHeight(selectedFlight, newHeight);
                     lvStatusUpdates.Items.Add($"Flight {selectedFlight.Airliner} (Flight ID: {selectedFlight.Id}) changed altitude to {newHeight}.");
                 }
                 else
@@ -66,7 +73,7 @@ namespace ControlTowerApp
         {
             Dispatcher.Invoke(() =>
             {
-                string message = $"Flight {e.Flight.Airliner} (Flight ID: {e.Flight.Id}) has departed for {e.Flight.Destination} at {e.Flight.DepartureTime:HH:mm:ss}.";
+                string message = $"Flight {e.Flight.FlightData.Airliner} (Flight ID: {e.Flight.FlightData.Id}) has departed for {e.Flight.FlightData.Destination} at {e.Flight.FlightData.DepartureTime:HH:mm:ss}.";
                 lvStatusUpdates.Items.Add(message);
             });
         }
@@ -75,17 +82,11 @@ namespace ControlTowerApp
         {
             Dispatcher.Invoke(() =>
             {
-                if (e.Flight != null)
-                {
-                    string message = $"Flight {e.Flight.Airliner} (Flight ID: {e.Flight.Id}) has landed at {DateTime.Now:HH:mm:ss}.";
-                    lvStatusUpdates.Items.Add(message);
-                    lvStatusUpdates.UpdateLayout();
-
-                    btnTakeOff.IsEnabled = true;
-                    btnNewHeight.IsEnabled = false;
-
-                    e.Flight.Destination = "Home";
-                }
+                string message = $"Flight {e.Flight.FlightData.Airliner} (Flight ID: {e.Flight.FlightData.Id}) has landed at {DateTime.Now:HH:mm:ss}.";
+                lvStatusUpdates.Items.Add(message);
+                btnTakeOff.IsEnabled = true;
+                btnNewHeight.IsEnabled = false;
+                e.Flight.FlightData.Destination = "Home";
             });
         }
     }

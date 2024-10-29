@@ -15,13 +15,6 @@ namespace ControlTowerBLL
         public FlightDTO FlightData { get; private set; }
         public int FlightHeight { get; private set; }
 
-        public string Airliner => FlightData.Airliner;
-        public string Id => FlightData.Id;
-        public string Destination { get => FlightData.Destination; set => FlightData.Destination = value; }
-        public double Duration => FlightData.Duration;
-        public bool InFlight { get => FlightData.InFlight; set => FlightData.InFlight = value; }
-        public DateTime DepartureTime { get => FlightData.DepartureTime; set => FlightData.DepartureTime = value; }
-
         public Flight(string airliner, string id, string destination, double duration)
         {
             FlightData = new FlightDTO
@@ -32,38 +25,15 @@ namespace ControlTowerBLL
                 Duration = duration,
                 InFlight = false
             };
-            flightProgress = 0;
-        }
-
-        public void SetupTimer()
-        {
-            dispatchTimer = new DispatcherTimer();
-            dispatchTimer.Tick += DispatcherTimer_Tick;
-            dispatchTimer.Interval = TimeSpan.FromSeconds(1);
-            dispatchTimer.Start();
-        }
-
-        private void DispatcherTimer_Tick(object sender, EventArgs e)
-        {
-            flightProgress += 1;
-            if (flightProgress >= FlightData.Duration)
-            {
-                OnLanding();
-            }
         }
 
         public void TakeOffFlight()
         {
-            InFlight = true;
-            DepartureTime = DateTime.Now;
+            FlightData.InFlight = true;
+            FlightData.DepartureTime = DateTime.Now;
             flightProgress = 0;
-            OnTakeOff();
             SetupTimer();
-        }
-
-        public void LandFlight()
-        {
-            OnLanding();
+            FlightTakeOff?.Invoke(this, new TakeOffEventArgs(this));
         }
 
         public void ChangeFlightHeight(int newHeight)
@@ -71,15 +41,32 @@ namespace ControlTowerBLL
             FlightHeight = newHeight;
         }
 
-        protected virtual void OnTakeOff()
+        public void LandFlight()
         {
-            FlightTakeOff?.Invoke(this, new TakeOffEventArgs(this));
+            FlightData.InFlight = false;
+            StopTimer();
+            FlightLanded?.Invoke(this, new LandedEventArgs(this));
         }
 
-        protected virtual void OnLanding()
+        private void SetupTimer()
         {
-            InFlight = false;
-            FlightLanded?.Invoke(this, new LandedEventArgs(this));
+            dispatchTimer = new DispatcherTimer();
+            dispatchTimer.Tick += OnTimerTick;
+            dispatchTimer.Interval = TimeSpan.FromSeconds(1);
+            dispatchTimer.Start();
+        }
+
+        private void OnTimerTick(object sender, EventArgs e)
+        {
+            flightProgress++;
+            if (flightProgress >= FlightData.Duration)
+            {
+                LandFlight();
+            }
+        }
+
+        private void StopTimer()
+        {
             dispatchTimer.Stop();
         }
     }

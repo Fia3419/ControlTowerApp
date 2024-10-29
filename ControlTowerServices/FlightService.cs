@@ -1,32 +1,39 @@
-using System;
-using System.Collections.Generic;
-using ControlTowerDTO;
 using ControlTowerBLL;
+using ControlTowerDTO;
 
 namespace ControlTowerServices
 {
     public class FlightService
     {
-        private ControlTower controlTower = new ControlTower();
+        private ControlTower controlTower;
 
-        public void AddFlight(FlightDTO flight)
+        public FlightService()
         {
+            controlTower = new ControlTower();
+        }
+
+        public void AddFlight(FlightDTO flightDTO)
+        {
+            Flight flight = new Flight(flightDTO.Airliner, flightDTO.Id, flightDTO.Destination, flightDTO.Duration);
             controlTower.AddFlight(flight);
         }
 
-        public List<FlightDTO> GetFlights()
+        public void TakeOffFlight(FlightDTO flightDTO)
         {
-            return controlTower.GetFlights();
+            Flight flight = controlTower.FindFlightById(flightDTO.Id);
+            controlTower.TakeOffFlight(flight);
         }
 
-        public void TakeOffFlight(FlightDTO flight)
+        public void LandFlight(FlightDTO flightDTO)
         {
-            controlTower.InitiateTakeOff(flight);
-        }
-
-        public void LandFlight(FlightDTO flight)
-        {
+            Flight flight = controlTower.FindFlightById(flightDTO.Id);
             controlTower.LandFlight(flight);
+        }
+
+        public void ChangeFlightHeight(FlightDTO flightDTO, int newHeight)
+        {
+            Flight flight = controlTower.FindFlightById(flightDTO.Id);
+            controlTower.ChangeFlightHeight(flight, newHeight);
         }
 
         public void SubscribeToTakeOff(EventHandler<TakeOffEventArgs> handler)
