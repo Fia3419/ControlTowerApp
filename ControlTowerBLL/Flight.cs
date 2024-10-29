@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Windows.Threading;
 using ControlTowerDTO;
-
 namespace ControlTowerBLL
 {
     public class Flight
     {
         public event EventHandler<TakeOffEventArgs> FlightTakeOff;
         public event EventHandler<LandedEventArgs> FlightLanded;
-        public event EventHandler<FlightHeightChangedEventArgs> FlightHeightChanged;
 
         private DispatcherTimer dispatchTimer;
-        private double flightProgress; // Keeps track of the simulated flight progress in hours
+        private double flightProgress;
 
         public FlightDTO FlightData { get; private set; }
         public int FlightHeight { get; private set; }
@@ -76,9 +74,7 @@ namespace ControlTowerBLL
         private void DispatcherTimer_Tick(object sender, EventArgs e)
         {
             flightProgress += 1;
-            Console.WriteLine($"Tick: {flightProgress}/{Duration} hours flown");
-
-            if (flightProgress >= Duration)
+            if (flightProgress >= FlightData.Duration)
             {
                 OnLanding();
             }
@@ -101,7 +97,6 @@ namespace ControlTowerBLL
         public void ChangeFlightHeight(int newHeight)
         {
             FlightHeight = newHeight;
-            OnFlightHeightChanged(newHeight);
         }
 
         protected virtual void OnTakeOff()
@@ -114,11 +109,6 @@ namespace ControlTowerBLL
             InFlight = false;
             FlightLanded?.Invoke(this, new LandedEventArgs(this));
             dispatchTimer.Stop();
-        }
-
-        protected virtual void OnFlightHeightChanged(int newHeight)
-        {
-            FlightHeightChanged?.Invoke(this, new FlightHeightChangedEventArgs(this, newHeight));
         }
     }
 }

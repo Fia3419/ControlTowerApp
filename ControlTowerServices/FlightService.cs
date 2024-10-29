@@ -38,10 +38,5 @@ namespace ControlTowerServices
         {
             controlTower.FlightLanded += handler;
         }
-
-        public void SubscribeToFlightHeightChanged(EventHandler<FlightHeightChangedEventArgs> handler)
-        {
-            controlTower.FlightHeightChanged += handler;
-        }
     }
 }

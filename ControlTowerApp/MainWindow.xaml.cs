@@ -27,7 +27,7 @@ namespace ControlTowerApp
                 return;
             }
 
-            var flight = new Flight(txtAirliner.Text, txtFlightId.Text, txtDestination.Text, (double)duration);
+            Flight flight = new Flight(txtAirliner.Text, txtFlightId.Text, txtDestination.Text, (double)duration);
             controlTower.AddFlight(flight);
             lvFlights.Items.Add(flight.FlightData);
             btnTakeOff.IsEnabled = true;
@@ -74,8 +74,6 @@ namespace ControlTowerApp
         {
             Dispatcher.Invoke(() =>
             {
-                Console.WriteLine("Inside Dispatcher for landing event.");
-
                 if (e.Flight != null)
                 {
                     string message = $"Flight {e.Flight.Airliner} (Flight ID: {e.Flight.Id}) has landed at {DateTime.Now:HH:mm:ss}.";
@@ -86,10 +84,6 @@ namespace ControlTowerApp
                     btnNewHeight.IsEnabled = false;
 
                     e.Flight.Destination = "Home";
-                }
-                else
-                {
-                    Console.WriteLine("Flight object is null in OnFlightLanded.");
                 }
             });
         }

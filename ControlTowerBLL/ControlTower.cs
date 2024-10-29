@@ -3,23 +3,34 @@ using System.Collections.Generic;
 using ControlTowerDAL;
 using ControlTowerDTO;
 using ControlTowerBLL.Managers;
+using ControlTowerBLL;
 
 namespace ControlTowerBLL
 {
     public class ControlTower : ListManager<Flight>
     {
-        private FlightRepository flightRepository = new FlightRepository();
-
-
+        private readonly FlightRepository flightRepository = new FlightRepository();
         public event EventHandler<TakeOffEventArgs> FlightTakeOff;
         public event EventHandler<LandedEventArgs> FlightLanded;
-        public event EventHandler<FlightHeightChangedEventArgs> FlightHeightChanged;
+        public delegate int ChangeAltitudeDelegate(int currentAltitude, int changeValue);
+
+
+        public ChangeAltitudeDelegate ChangeAltitudeHandler { get; private set; }
+
+        public ControlTower()
+        {
+            ChangeAltitudeHandler = ChangeAltitude;
+        }
+
+        private int ChangeAltitude(int currentAltitude, int changeValue)
+        {
+            return currentAltitude + changeValue;
+        }
 
         public void AddFlight(Flight flight)
         {
             flight.FlightTakeOff += OnFlightTakeOff;
             flight.FlightLanded += OnFlightLanded;
-            flight.FlightHeightChanged += OnFlightHeightChanged;
             Add(flight);
         }
 
@@ -38,7 +49,7 @@ namespace ControlTowerBLL
         public void TakeOffFlight(FlightDTO flightDTO)
         {
             Flight flight = items.Find(f => f.Id == flightDTO.Id);
-            if (flight != null)
+            if (flight != null && !flight.InFlight)
             {
                 flight.TakeOffFlight();
                 flightDTO.InFlight = true;
@@ -58,12 +69,14 @@ namespace ControlTowerBLL
             }
         }
 
-        public void ChangeFlightHeight(FlightDTO flightDTO, int newHeight)
+        public void ChangeFlightHeight(FlightDTO flightDTO, int changeValue)
         {
             Flight flight = items.Find(f => f.Id == flightDTO.Id);
-            if (flight != null)
+            if (flight != null && flight.InFlight)
             {
-                flight.ChangeFlightHeight(newHeight);
+                // Use the delegate to change the altitude
+                int newAltitude = ChangeAltitudeHandler(flight.FlightHeight, changeValue);
+                flight.ChangeFlightHeight(newAltitude);
             }
         }
 
@@ -75,11 +88,6 @@ namespace ControlTowerBLL
         private void OnFlightLanded(object sender, LandedEventArgs e)
         {
             FlightLanded?.Invoke(this, e);
-        }
-
-        private void OnFlightHeightChanged(object sender, FlightHeightChangedEventArgs e)
-        {
-            FlightHeightChanged?.Invoke(this, e);
         }
     }
 }
