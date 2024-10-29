@@ -10,6 +10,7 @@ namespace ControlTowerBLL
     {
         private FlightRepository flightRepository = new FlightRepository();
 
+
         public event EventHandler<TakeOffEventArgs> FlightTakeOff;
         public event EventHandler<LandedEventArgs> FlightLanded;
         public event EventHandler<FlightHeightChangedEventArgs> FlightHeightChanged;
@@ -42,7 +43,6 @@ namespace ControlTowerBLL
                 flight.TakeOffFlight();
                 flightDTO.InFlight = true;
                 flightDTO.DepartureTime = DateTime.Now;
-                FlightTakeOff?.Invoke(this, new TakeOffEventArgs(flight));
             }
         }
 
@@ -64,7 +64,6 @@ namespace ControlTowerBLL
             if (flight != null)
             {
                 flight.ChangeFlightHeight(newHeight);
-                FlightHeightChanged?.Invoke(this, new FlightHeightChangedEventArgs(flight, newHeight));
             }
         }
 

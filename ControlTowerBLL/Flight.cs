@@ -106,17 +106,14 @@ namespace ControlTowerBLL
 
         protected virtual void OnTakeOff()
         {
-            Console.WriteLine("Takeoff event triggered in Flight.");
             FlightTakeOff?.Invoke(this, new TakeOffEventArgs(this));
         }
 
         protected virtual void OnLanding()
         {
             InFlight = false;
-            Console.WriteLine("OnLanding method triggered in Flight.");
             FlightLanded?.Invoke(this, new LandedEventArgs(this));
             dispatchTimer.Stop();
-            Console.WriteLine("dispatchTimer stopped.");
         }
 
         protected virtual void OnFlightHeightChanged(int newHeight)
