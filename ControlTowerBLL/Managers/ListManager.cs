@@ -1,15 +1,18 @@
 ﻿using ControlTowerBLL.Interfaces;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace ControlTowerBLL.Managers
 {
+    /// <summary>
+    /// Provides basic list management functionalities such as adding, removing, replacing, and accessing items in a list.
+    /// </summary>
+    /// <typeparam name="T">The type of items to manage.</typeparam>
     public class ListManager<T> : IListManager<T>
     {
         protected readonly List<T> items;
 
+        /// <summary>
+        /// Initializes a new instance of the ListManager class.
+        /// </summary>
         public ListManager()
         {
             items = new List<T>();
@@ -27,7 +30,7 @@ namespace ControlTowerBLL.Managers
             items.Add(item);
         }
 
-        // <summary>
+        /// <summary>
         /// Removes an item at the specified index from the list.
         /// </summary>
         /// <param name="index">The zero-based index of the item to remove.</param>

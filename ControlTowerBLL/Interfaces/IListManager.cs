@@ -1,5 +1,9 @@
 namespace ControlTowerBLL.Interfaces
 {
+    /// <summary>
+    /// Interface for managing a generic list, providing methods for adding, removing, and replacing items.
+    /// </summary>
+    /// <typeparam name="T">The type of object managed by the list.</typeparam>
     public interface IListManager<T>
     {
         /// <summary>

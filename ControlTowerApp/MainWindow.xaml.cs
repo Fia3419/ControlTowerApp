@@ -6,10 +6,17 @@ using ControlTowerServices;
 
 namespace ControlTowerApp
 {
+    /// <summary>
+    /// Interaction logic for the MainWindow class, handling the user interface.
+    /// It manages flight operations by interacting with the FlightService class.
+    /// </summary>
     public partial class MainWindow : Window
     {
         private FlightService flightService;
 
+        /// <summary>
+        /// Initializes a new instance of the MainWindow class and subscribes to flight events.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -18,6 +25,11 @@ namespace ControlTowerApp
             flightService.SubscribeToLanding(OnFlightLanded);
         }
 
+        /// <summary>
+        /// Handles the Add Plane button click event. Adds a new flight to the system.
+        /// </summary>
+        /// <param name="sender">The button that was clicked.</param>
+        /// <param name="e">Event arguments for the button click.</param>
         private void btnAddPlane_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtAirliner.Text) ||
@@ -29,6 +41,7 @@ namespace ControlTowerApp
                 return;
             }
 
+            // Create and add a new flight using FlightDTO
             FlightDTO flightDTO = new FlightDTO
             {
                 Airliner = txtAirliner.Text,
@@ -41,6 +54,11 @@ namespace ControlTowerApp
             btnTakeOff.IsEnabled = true;
         }
 
+        /// <summary>
+        /// Handles the Take Off button click event to initiate flight takeoff.
+        /// </summary>
+        /// <param name="sender">The button that was clicked.</param>
+        /// <param name="e">Event arguments for the button click.</param>
         private void btnTakeOff_Click(object sender, RoutedEventArgs e)
         {
             if (lvFlights.SelectedItem is FlightDTO selectedFlight && !selectedFlight.InFlight)
@@ -51,6 +69,11 @@ namespace ControlTowerApp
             }
         }
 
+        /// <summary>
+        /// Handles the New Height button click event to change the flight's altitude.
+        /// </summary>
+        /// <param name="sender">The button that was clicked.</param>
+        /// <param name="e">Event arguments for the button click.</param>
         private void btnNewHeight_Click(object sender, RoutedEventArgs e)
         {
             if (lvFlights.SelectedItem is FlightDTO selectedFlight)
@@ -69,6 +92,11 @@ namespace ControlTowerApp
             }
         }
 
+        /// <summary>
+        /// Handles the FlightTakeOff event, updating the status of a flight.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">Event data related to the flight takeoff.</param>
         private void OnFlightTakeOff(object sender, TakeOffEventArgs e)
         {
             Dispatcher.Invoke(() =>
@@ -78,6 +106,11 @@ namespace ControlTowerApp
             });
         }
 
+        /// <summary>
+        /// Handles the FlightLanded event, updating the status of a flight.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">Event data related to the flight landing.</param>
         private void OnFlightLanded(object sender, LandedEventArgs e)
         {
             Dispatcher.Invoke(() =>
