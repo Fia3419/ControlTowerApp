@@ -14,6 +14,7 @@ namespace ControlTowerApp
             InitializeComponent();
             controlTower.FlightTakeOff += OnFlightTakeOff;
             controlTower.FlightLanded += OnFlightLanded;
+            controlTower.FlightHeightChanged += OnFlightHeightChanged;
         }
 
         private void btnAddPlane_Click(object sender, RoutedEventArgs e)
@@ -33,7 +34,6 @@ namespace ControlTowerApp
             btnTakeOff.IsEnabled = true;
         }
 
-
         private void btnTakeOff_Click(object sender, RoutedEventArgs e)
         {
             if (lvFlights.SelectedItem is FlightDTO selectedFlight && !selectedFlight.InFlight)
@@ -44,7 +44,6 @@ namespace ControlTowerApp
             }
         }
 
-
         private void btnNewHeight_Click(object sender, RoutedEventArgs e)
         {
             if (lvFlights.SelectedItem is FlightDTO selectedFlight)
@@ -54,7 +53,6 @@ namespace ControlTowerApp
                 if (int.TryParse(inputHeight, out int newHeight))
                 {
                     controlTower.ChangeFlightHeight(selectedFlight, newHeight);
-
                     lvStatusUpdates.Items.Add($"Flight {selectedFlight.Airliner} (Flight ID: {selectedFlight.Id}) changed altitude to {newHeight}.");
                 }
                 else
@@ -64,14 +62,13 @@ namespace ControlTowerApp
             }
         }
 
-
-
         private void OnFlightTakeOff(object sender, TakeOffEventArgs e)
         {
             Dispatcher.Invoke(() =>
             {
                 string message = $"Flight {e.Flight.Airliner} (Flight ID: {e.Flight.Id}) has departed for {e.Flight.Destination} at {e.Flight.DepartureTime:HH:mm:ss}.";
                 lvStatusUpdates.Items.Add(message);
+                Console.WriteLine("Takeoff message added to ListView.");
             });
         }
 
@@ -79,14 +76,20 @@ namespace ControlTowerApp
         {
             Dispatcher.Invoke(() =>
             {
+                Console.WriteLine("Inside Dispatcher for landing event.");
 
                 if (e.Flight != null)
                 {
                     string message = $"Flight {e.Flight.Airliner} (Flight ID: {e.Flight.Id}) has landed at {DateTime.Now:HH:mm:ss}.";
                     lvStatusUpdates.Items.Add(message);
                     lvStatusUpdates.UpdateLayout();
+                    Console.WriteLine("Landing message added to ListView.");
+
+                    // Allow the flight to take off again after landing
                     btnTakeOff.IsEnabled = true;
                     btnNewHeight.IsEnabled = false;
+
+                    // Update the destination to "Home"
                     e.Flight.Destination = "Home";
                 }
                 else
@@ -96,5 +99,12 @@ namespace ControlTowerApp
             });
         }
 
+        private void OnFlightHeightChanged(object sender, FlightHeightChangedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                lvStatusUpdates.Items.Add($"Flight {e.Flight.Airliner} (Flight ID: {e.Flight.Id}) changed altitude to {e.NewHeight}.");
+            });
+        }
     }
 }

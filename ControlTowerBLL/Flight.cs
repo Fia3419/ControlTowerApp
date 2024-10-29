@@ -6,8 +6,8 @@ namespace ControlTowerBLL
 {
     public class Flight
     {
-        public event EventHandler<TakeOffEventArgs> TakeOff;
-        public event EventHandler<LandedEventArgs> Landed;
+        public event EventHandler<TakeOffEventArgs> FlightTakeOff;
+        public event EventHandler<LandedEventArgs> FlightLanded;
         public event EventHandler<FlightHeightChangedEventArgs> FlightHeightChanged;
 
         private DispatcherTimer dispatchTimer;
@@ -106,14 +106,17 @@ namespace ControlTowerBLL
 
         protected virtual void OnTakeOff()
         {
-            TakeOff?.Invoke(this, new TakeOffEventArgs(this));
+            Console.WriteLine("Takeoff event triggered in Flight.");
+            FlightTakeOff?.Invoke(this, new TakeOffEventArgs(this));
         }
 
         protected virtual void OnLanding()
         {
             InFlight = false;
-            Landed?.Invoke(this, new LandedEventArgs(this));
+            Console.WriteLine("OnLanding method triggered in Flight.");
+            FlightLanded?.Invoke(this, new LandedEventArgs(this));
             dispatchTimer.Stop();
+            Console.WriteLine("dispatchTimer stopped.");
         }
 
         protected virtual void OnFlightHeightChanged(int newHeight)
