@@ -41,7 +41,6 @@ namespace ControlTowerApp
                 return;
             }
 
-            // Create and add a new flight using FlightDTO
             FlightDTO flightDTO = new FlightDTO
             {
                 Airliner = txtAirliner.Text,
